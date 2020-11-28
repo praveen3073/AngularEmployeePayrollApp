@@ -1,0 +1,29 @@
+<div class="panel panel-default">
+  <!-- <div>
+    Add Employee
+    <app-create-employee></app-create-employee>
+  </div> -->
+  <div class="employeeHeading">
+    <h1>Employees</h1>
+  </div>
+  <div class="employeeBody">
+    <table class="employeeTable">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>Name</th>
+          <th>Salary</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of employees">
+          <td>{{employee.id}}</td>
+          <td>{{employee.name}}</td>
+          <td>{{employee.salary}}</td>
+          <td><button (click)="deleteEmployee(employee.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
