@@ -3,7 +3,7 @@ package com.bl.service;
 import com.bl.domain.EmployeePayroll;
 import com.bl.dto.EmployeePayrollDto;
 import com.bl.exceptions.DetailsNotProvidedExceptions;
-import com.bl.exceptions.UserNotFound;
+import com.bl.exceptions.UserNotFoundException;
 import com.bl.repository.EmployeePayrollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class EmployeePayrollService {
             return new EmployeePayrollDto(employeePayrollRepository.save(employeePayroll));
         }
 
-        throw new DetailsNotProvidedExceptions("Invalid Data");
+            throw new DetailsNotProvidedExceptions("Input Fields Can't Be Null!");
     }
 
     public EmployeePayrollDto UpdateUser(EmployeePayrollDto employeePayrollDto){
@@ -37,14 +37,14 @@ public class EmployeePayrollService {
                 employeePayroll.setSalary(employeePayroll.getSalary());
             }
            return new EmployeePayrollDto(employeePayrollRepository.save(employeePayroll));
-        }).orElseThrow(()-> new UserNotFound("UserNotFound"));
+        }).orElseThrow(()-> new UserNotFoundException("User Not Found!"));
     }
 
     public EmployeePayrollDto deleteUser(Long id){
         return employeePayrollRepository.findById(id).map(employeePayroll -> {
             employeePayrollRepository.deleteById(employeePayroll.getId());
             return new EmployeePayrollDto(employeePayroll);
-        }).orElseThrow(()-> new UserNotFound("UserNotFound"));
+        }).orElseThrow(()-> new UserNotFoundException("User Not Found!"));
     }
 
 

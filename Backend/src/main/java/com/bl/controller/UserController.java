@@ -1,13 +1,16 @@
 package com.bl.controller;
 
 import com.bl.dto.EmployeePayrollDto;
-import com.bl.exceptions.UserNotFound;
+import com.bl.dto.ResponseDto;
+import com.bl.exceptions.PayrollException;
+import com.bl.exceptions.UserNotFoundException;
 import com.bl.service.EmployeePayrollService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,39 +20,43 @@ public class UserController {
     @Autowired
     EmployeePayrollService employeePayrollService;
 
-    @PostMapping("/create")
-    public ResponseEntity<EmployeePayrollDto> createUser(@RequestBody EmployeePayrollDto user){
+    /*@PostMapping("/create")
+    public ResponseEntity<ResponseDto> createUser(@RequestBody @Valid EmployeePayrollDto user, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+                return new ResponseEntity<ResponseDto>(new ResponseDto((bindingResult.getAllErrors().get(0).getDefaultMessage()),"404"),HttpStatus.BAD_REQUEST);
+        }
+    }*/
+
+    /*@PostMapping("/create")
+    public ResponseEntity<EmployeePayrollDto> createUser(@Valid @RequestBody EmployeePayrollDto user){
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(employeePayrollService.CreateUser(user));
         } catch (UserNotFound e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }*/
+
+    @PostMapping("/create")
+    public ResponseEntity<ResponseDto> createUser(@Valid @RequestBody EmployeePayrollDto user){
+        ResponseDto responseDto = new ResponseDto("Employee Record Created Succesfully", employeePayrollService.CreateUser(user));
+            return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<EmployeePayrollDto> updateUser(@RequestBody EmployeePayrollDto user){
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(employeePayrollService.UpdateUser(user));
-        } catch (UserNotFound e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<ResponseDto> updateUser(@Valid @RequestBody EmployeePayrollDto user){
+        ResponseDto responseDto = new ResponseDto("Employee Record Updated Succesfully", employeePayrollService.UpdateUser(user));
+        return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<EmployeePayrollDto> deleteUser(@PathVariable("id")Long id){
-        try{
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(employeePayrollService.deleteUser(id));
-        } catch (UserNotFound e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<ResponseDto> deleteUser(@PathVariable("id")Long id){
+        ResponseDto responseDto = new ResponseDto("Employee Record Deleted Succesfully", employeePayrollService.deleteUser(id));
+        return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/get")
-    public ResponseEntity<List<EmployeePayrollDto>> getAllUser(){
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(employeePayrollService.getAllUser());
-        } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<ResponseDto> getAllUser(){
+        ResponseDto responseDto = new ResponseDto("Displaying All Records in DB", employeePayrollService.getAllUser());
+        return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.OK);
     }
 }

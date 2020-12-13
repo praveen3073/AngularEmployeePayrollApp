@@ -1,6 +1,7 @@
 package com.bl.domain;
 
 import lombok.Data;
+import lombok.NonNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ public class EmployeePayroll implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NonNull
     private String name;
 
     private String salary;
